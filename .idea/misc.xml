@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/bluetooth.xml" value="0.37846153846153846" />
+        <entry key="app/src/main/res/drawable/bluetooth_connect.xml" value="0.37846153846153846" />
+        <entry key="app/src/main/res/drawable/bluetooth_off.xml" value="0.37846153846153846" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.36822916666666666" />
+        <entry key="app/src/main/res/layout/item_scan_device.xml" value="0.36822916666666666" />
+        <entry key="app/src/main/res/layout/scan_bluetooth.xml" value="0.4244791666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
