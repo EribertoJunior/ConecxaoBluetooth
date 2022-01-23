@@ -19,8 +19,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModel()
 
-    private var isConnected: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,8 +41,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.button.setOnClickListener {
-            if (isConnected) {
-                viewModel.sendMessage("abc")
+            if (viewModel.isConnected()) {
+                viewModel.sendMessage("123")
             }
         }
     }
@@ -56,8 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initObserver() {
         viewModel.bluetoothIsConnected().observe(this) {
-            isConnected = it
-            if (isConnected) {
+            if (it) {
                 binding.fabBluetooth.setImageResource(R.drawable.bluetooth_connect)
                 Log.i(TAG, "Bluetooth connected")
             } else {

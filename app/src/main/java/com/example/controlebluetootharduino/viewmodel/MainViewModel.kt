@@ -16,6 +16,7 @@ class MainViewModel(private val bluetoothController: BluetoothController) : View
         mutableLiveData.postValue(bluetoothController.isConnected())
         return mutableLiveData
     }
+    fun isConnected() = bluetoothController.isConnected()
 
     fun bluetoothIsEnabled() = bluetoothController.isEnabled()
 
