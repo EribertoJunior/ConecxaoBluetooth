@@ -36,18 +36,18 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
                 val bluetoothIn = mSocket?.inputStream
                 val buffer = ByteArray(256)
 
-                Log.d(TAG, "socket connected!!!")
+                Log.d(tag, "socket connected!!!")
                 while (true) {
                     try {
                         bluetoothIn?.let {
-                            Log.d(TAG, "it.available(): " + it.available())
+                            Log.d(tag, "it.available(): " + it.available())
                             if (it.available() > 0) {
                                 bluetoothIn.read(buffer, 0, it.available())
                                 val result = String(buffer)
-                                Log.d(TAG, "result: $result")
+                                Log.d(tag, "result: $result")
 
                                 if(result.contains(":") and result.isNotEmpty()){
-                                    Log.d(TAG, "result Completo: ${result.substringBefore(":")}")
+                                    Log.d(tag, "result Completo: ${result.substringBefore(":")}")
                                 }
                             }
                         }
@@ -63,7 +63,7 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
 
     override fun disconnectBluetoothDevice() {
         mSocket?.close()
-        Log.i(TAG, "Device disconnect")
+        Log.i(tag, "Device disconnect")
     }
 
     override fun isConnected(): Boolean {
@@ -86,14 +86,14 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
                 when (intent.action) {
                     BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                         // Processo de discovery inicializado.
-                        Log.i(TAG, "Processo de discovery inicializado.")
+                        Log.i(tag, "Processo de discovery inicializado.")
                         listDevice.clear()
                     }
                     BluetoothDevice.ACTION_FOUND -> {
                         intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                             ?.let {
                                 if (!it.name.isNullOrBlank()) {
-                                    Log.i(TAG, "Device encontrado: ${it.name}")
+                                    Log.i(tag, "Device encontrado: ${it.name}")
                                     listDevice.add(it)
                                 }
                             }
@@ -101,7 +101,7 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
                         // Encontrou um dispositivo
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                        Log.i(TAG, "Processo de discovery finalizado.")
+                        Log.i(tag, "Processo de discovery finalizado.")
                         // Processo de discovery finalizado.
                         //onScanDeviceCompleted.onScanDeviceComplited(listDevice)
                         context.unregisterReceiver(this)
@@ -119,5 +119,5 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
         bluetoothAdapter.startDiscovery()
     }
 
-    private val TAG: String = javaClass.name
+    private val tag: String = javaClass.name
 }
