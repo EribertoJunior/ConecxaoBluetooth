@@ -9,6 +9,5 @@ interface BluetoothController {
     fun disconnectBluetoothDevice()
     fun isConnected(): Boolean
     fun isEnabled(): Boolean
-    fun disconnect()
     fun sendMessage(mensagem: String)
 }
