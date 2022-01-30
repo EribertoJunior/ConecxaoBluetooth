@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,15 +35,42 @@ class MainActivity : AppCompatActivity() {
         }
         checkBluetoothIsEnabled()
 
-        binding.fabBluetooth.setOnClickListener {
-            if (!checkBluetoothIsEnabled()) {
-                resultLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
-            }
-        }
+        configFab()
 
+        configButton()
+        configSeekBar()
+    }
+
+    private fun configSeekBar() {
+        binding.seekBar2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                val aceleracao: Int = (p1*255) / 100
+                Log.i(TAG, "onProgressChanged: $aceleracao")
+                viewModel.sendAcceleration(aceleracao)
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+                //Log.i(TAG, "onStartTrackingTouch: true")
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                //Log.i(TAG, "onStopTrackingTouch: true")
+            }
+        })
+    }
+
+    private fun configButton() {
         binding.button.setOnClickListener {
             if (viewModel.isConnected()) {
                 viewModel.sendMessage("123")
+            }
+        }
+    }
+
+    private fun configFab() {
+        binding.fabBluetooth.setOnClickListener {
+            if (!checkBluetoothIsEnabled()) {
+                resultLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
             }
         }
     }

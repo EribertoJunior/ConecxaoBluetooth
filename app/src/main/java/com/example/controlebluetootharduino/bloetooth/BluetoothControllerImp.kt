@@ -79,6 +79,11 @@ class BluetoothControllerImp(private val bluetoothAdapter: BluetoothAdapter, pri
             mSocket?.outputStream?.write(mensagem.toByteArray())
     }
 
+    override fun sendAcceleration(acceleration: Int) {
+        if(isConnected())
+            mSocket?.outputStream?.write(acceleration)
+    }
+
     fun scanDevice() {
         val listDevice: ArrayList<BluetoothDevice> = arrayListOf()
         val receiver = object : BroadcastReceiver() {

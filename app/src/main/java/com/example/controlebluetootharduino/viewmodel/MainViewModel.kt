@@ -16,6 +16,7 @@ class MainViewModel(private val bluetoothController: BluetoothController) : View
         mutableLiveData.postValue(bluetoothController.isConnected())
         return mutableLiveData
     }
+
     fun isConnected() = bluetoothController.isConnected()
 
     fun bluetoothIsEnabled() = bluetoothController.isEnabled()
@@ -37,12 +38,17 @@ class MainViewModel(private val bluetoothController: BluetoothController) : View
                 pairedDevices?.first { it.name == bluetoothDeviceName }
             bluetoothDevice?.let { bluetoothController.connectBluetoothDevice(it) }
         }
-
     }
 
     fun sendMessage(message: String) {
-        if(bluetoothController.isConnected()){
+        if (bluetoothController.isConnected()) {
             bluetoothController.sendMessage(message)
+        }
+    }
+
+    fun sendAcceleration(acceleration: Int) {
+        if(bluetoothController.isConnected()){
+            bluetoothController.sendAcceleration(acceleration)
         }
     }
 

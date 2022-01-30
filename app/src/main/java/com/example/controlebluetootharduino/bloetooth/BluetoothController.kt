@@ -10,4 +10,5 @@ interface BluetoothController {
     fun isConnected(): Boolean
     fun isEnabled(): Boolean
     fun sendMessage(mensagem: String)
+    fun sendAcceleration(acceleration: Int)
 }
