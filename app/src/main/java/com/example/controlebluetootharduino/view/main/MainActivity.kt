@@ -1,7 +1,12 @@
 package com.example.controlebluetootharduino.view.main
 
 import android.bluetooth.BluetoothAdapter
+import android.content.Context
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.SeekBar
@@ -14,11 +19,14 @@ import com.example.controlebluetootharduino.databinding.ActivityMainBinding
 import com.example.controlebluetootharduino.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModel()
+
+    private lateinit var sensorManager: SensorManager
+    private lateinit var mAcelerometro: Sensor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +36,46 @@ class MainActivity : AppCompatActivity() {
 
         initObserver()
 
-        binding.listDevice.apply {
-            adapter = MainAdapter(){
-                viewModel.connectBluetoothDevice(it)
-            }
-        }
+        configListDevices()
         checkBluetoothIsEnabled()
 
         configFab()
 
         configButton()
         configSeekBar()
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mAcelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        //val sensor: Sensor = sensorManager.getDefaultSensor(Sensor.)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, mAcelerometro, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.disconnect()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        resultLauncher = activityResultLauncher()
+    }
+
+    private fun configListDevices() {
+        binding.listDevice.apply {
+            adapter = MainAdapter {
+                viewModel.connectBluetoothDevice(it)
+            }
+        }
     }
 
     private fun configSeekBar() {
@@ -75,11 +112,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.disconnect()
-    }
-
     private fun initObserver() {
         viewModel.bluetoothIsConnected().observe(this) {
             if (it) {
@@ -103,11 +135,6 @@ class MainActivity : AppCompatActivity() {
             binding.fabBluetooth.setImageResource(R.drawable.bluetooth_off)
         }
         return bluetoothIsEnabled
-    }
-
-    override fun onStart() {
-        super.onStart()
-        resultLauncher = activityResultLauncher()
     }
 
     private fun activityResultLauncher(): ActivityResultLauncher<Intent> {
@@ -135,4 +162,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val TAG: String = "MainActivity"
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            val x = it.values?.get(0)
+            val y = it.values?.get(1)
+            val z = it.values?.get(2)
+
+            binding.tvValorX.text = "X ${x.toString()}"
+            binding.tvValorY.text = "Y ${y.toString()}"
+            binding.tvValorZ.text = "Z ${z.toString()}"
+
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        //TODO("Not yet implemented")
+    }
 }
